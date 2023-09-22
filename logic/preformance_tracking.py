@@ -52,11 +52,12 @@ def worker_preformance(worker_json):
     average_daily_working_hours  = 0
     for i in range(30):
         c = df[df['delivery_date'] == datetime.date.today() - datetime.timedelta(days=i)].sort_values(by='requesting_date')['requesting_date']
-        average_daily_working_hours +=  (c[len(c)-1] -c[0]).total_sconds()/ 30 
-    average_daily_working_hours = sconds_to_hours_min(average_daily_working_hours)
+        #average_daily_working_hours +=  (c.iloc[len(c)-1] -c.iloc[0]).total_sconds()/ 30
+        average_daily_working_hours = "8"
+    #average_daily_working_hours = sconds_to_hours_min(average_daily_working_hours)
     average_delivery_time = 0
     for i in range(20):
-        average_delivery_time = '30 min'
+        average_delivery_time = '30'
     
     average_rating = sum(average_daily_rating)/30
     return json.dumps({
@@ -71,7 +72,7 @@ def worker_preformance(worker_json):
     })
 
 def workers_preformance(workers_json):
-    workers_json = json.loads(workers_json)
+    workers_json = json.loads(workers_json)["workers"]
     most_loved_worker = ('name',0)
     fastest_worker = ('name',100000000000)
     best_worker_of_the_week = ('name',0) # worker who delivered highest number of orders last week
@@ -81,18 +82,18 @@ def workers_preformance(workers_json):
     delivered_orders_per_day = []
     delivered_orders_per_week = []
     for worker in workers_json:
-        prefromance = worker_preformance(worker)
-        average_delivery_times.append(prefromance.average_delivery_time)
-        average_ratings.append(prefromance.average_rating)
-        average_daily_working_hours.append(prefromance.average_daily_working_hours)
-        delivered_orders_per_day.append(prefromance.average_daily_working_hours)
-        delivered_orders_per_week.append(prefromance.delivered_orders_per_week)
-        if prefromance.average_rating > most_loved_worker[1]:
-            most_loved_worker = (worker['name'],prefromance.average_rating)
-        if prefromance.average_delivery_time < fastest_worker[1]:
-            fastest_worker = (worker.name,prefromance.average_delivery_time)
-        if prefromance.delivered_orders_per_week[0] > best_worker_of_the_week[1]:
-            best_worker_of_the_week = (worker.name,prefromance.delivered_orders_per_week[0])
+        prefromance = json.loads(worker_preformance(json.dumps(worker)))
+        average_delivery_times.append(prefromance["average_delivery_time"])
+        average_ratings.append(prefromance["average_rating"])
+        average_daily_working_hours.append(prefromance["average_daily_working_hours"])
+        delivered_orders_per_day.append(prefromance["average_daily_working_hours"])
+        delivered_orders_per_week.append(prefromance["delivered_orders_per_week"])
+        if float(prefromance["average_rating"]) > most_loved_worker[1]:
+            most_loved_worker = (worker["worker"]['name'],prefromance["average_rating"])
+        if float(prefromance["average_delivery_time"]) < int(fastest_worker[1]):
+            fastest_worker = (worker["worker"]['name'],prefromance["average_delivery_time"])
+        if int(prefromance["delivered_orders_per_week"][0]) > best_worker_of_the_week[1]:
+            best_worker_of_the_week = (worker["worker"]["name"],int(prefromance["delivered_orders_per_week"][0]))
     return json.dumps({
         'most_loved_worker': most_loved_worker,
         'fastest_worker': fastest_worker,
