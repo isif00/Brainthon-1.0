@@ -1,0 +1,1 @@
+#this script is responsible for managing a distributing orders among all avalaible workers

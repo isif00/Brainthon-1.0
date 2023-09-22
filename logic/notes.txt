@@ -1,0 +1,56 @@
+class worker
+{
+ string name 
+ list<order> selected_orders
+ list<delivery> deliveries_history 
+ list<int> ratinges
+}
+class delivery 
+{
+ order order
+ date delivery_date(time)
+ int cleint_rating
+}
+
+class order
+{
+ string cleint_name
+ string location 
+ string order_name
+ date requesting_date (date + time)
+}
+
+
+. def workers preformance 
+     worker best_worker
+     worker most_loved_worker (the worker who has highest rating)
+     worker fastest_worker (the worker 
+     . list<(name,int)> delivered order per day
+      . list<(name,int)> delivered order per week
+      . list<(name,int) average_delivered_orders_per_day
+      . list<(name,int)> average_delivered_orders_per_day
+      . list <(name,float)> average_daily_working_hours
+      . average_order_delivey_time
+      . average_order_delivery_time 
+      . average_rating
+
+   
+. def worker preformance
+       . list<int> delivered order per day
+       . list<int> delivered order per week
+       . int average_delivered_orders_per_day
+       . int average_delivered_orders_per_day
+       . list <float> average_daily_working_hours
+       . list <float> average_weekly_working_hours
+       . float average_order_delivey_time
+       . float average_daily_order_delivery_time 
+       . float average_daily_weekly_delivery_time 
+       . float average_rating
+       . float average_daily_rating 
+       . float average_weekly_rating
+
+ . def distribute_orders (gives a list of orders to a specific worker to deliver) takes a workers and a list of all orders and recommends orders  that are in the have same location to the same workers to improve delivery speed and the oldest first
+
+
+
+    
