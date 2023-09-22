@@ -36,7 +36,8 @@ def sconds_to_hours_min(seconds):
 def worker_preformance(worker_json):
     worker_json = json.loads(worker_json)
     #. list<int> delivered order per day
-    df = pd.DataFrame.from_dict(worker_json['worker']['deliveries_history'])
+    df = list(map(lambda x:pd.DataFrame.from_dict(x) ,worker_json['worker']['deliveries_history'][:]))
+    df = pd.concat(df,ignore_index=False).transpose()
     delivered_count_per_day = []
     average_daily_rating = []
     for i in range(30):
@@ -47,7 +48,7 @@ def worker_preformance(worker_json):
     average_weekly_rating = []
     for i in range(4):
         delivered_count_per_week.append(sum(delivered_count_per_day[i*7:i*7 + 7]))
-        average_weekly_rating.apped(sum(average_daily_rating[i*7:i*7 + 7]))
+        average_weekly_rating.append(sum(average_daily_rating[i*7:i*7 + 7]))
     average_daily_working_hours  = 0
     for i in range(30):
         c = df[df['delivery_date'] == datetime.date.today() - datetime.timedelta(days=i)].sort_values(by='requesting_date')['requesting_date']
@@ -105,3 +106,5 @@ def workers_preformance(workers_json):
 '''
 workers_json is json string that contains list of all workers 
 '''
+
+worker_preformance('{"worker": {"coordinate": [987654, 1234567], "deliveries_history": [{"order": {"address": "456 Elm St, CityB", "client_name": "Bob Smith", "client_rating": 4.9, "delivery_date": "2023-09-20 Monday 6:30 PM", "order_name": "Sushi Delight", "requesting_date": "2023-09-20 Monday 6:00 PM"},"order": {"address": "456 Elm St, CityB", "client_name": "Bob Smith", "client_rating": 4.9, "delivery_date": "2023-09-20 Monday 6:30 PM", "order_name": "Sushi Delight", "requesting_date": "2023-09-20 Monday 6:00 PM"}}], "is_available": true, "name": "John", "ratings": [3.8, 4.1, 4.3], "selected_orders": [{"order": {"address": "123 Main St, CityA", "client_name": "Alice Johnson", "client_rating": 4.6, "delivery_date": "2023-09-22 Wednesday 1:00 PM", "order_name": "Burger Combo", "requesting_date": "2023-09-22 Wednesday 12:30 PM"}}]}}')
